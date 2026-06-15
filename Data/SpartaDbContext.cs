@@ -10,15 +10,17 @@ public class SpartaDbContext : DbContext
     }
 
     public DbSet<SpartaWalkAwayMargin> WalkAwayMargins { get; set; } = null!;
+    public DbSet<SpartaPriceIncrease> PriceIncreases { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
+        // Walk Away Margin configuration
         modelBuilder.Entity<SpartaWalkAwayMargin>(entity =>
         {
             entity.ToTable("tb_SPARTA_WalkAwayfloorMargin_Mst");
-
+            
             entity.HasKey(e => new { e.ShortCode, e.SalesOrg, e.DirectPricing })
                 .HasName("PK_WalkAwayMargin");
 
@@ -50,6 +52,42 @@ public class SpartaDbContext : DbContext
                 .HasColumnName("Direct_Pricing")
                 .HasColumnType("char(1)")
                 .IsRequired();
+        });
+
+        // Price Increase (LAO Freeze) configuration
+        modelBuilder.Entity<SpartaPriceIncrease>(entity =>
+        {
+            entity.ToTable("tb_SPARTA_PriceIncrease");
+            
+            entity.HasKey(e => new { e.ContractNumber, e.SalesOrganization, e.ShortCode })
+                .HasName("PK_PriceIncrease");
+
+            entity.Property(e => e.ContractNumber)
+                .HasColumnType("varchar(20)");
+
+            entity.Property(e => e.SalesOrganization)
+                .HasColumnType("varchar(50)");
+
+            entity.Property(e => e.BlockDate)
+                .HasColumnType("datetime2")
+                .IsRequired();
+
+            entity.Property(e => e.ReleaseDate)
+                .HasColumnType("datetime2")
+                .IsRequired();
+
+            entity.Property(e => e.ShortCode)
+                .HasColumnType("varchar(50)");
+
+            entity.Property(e => e.CreatedDateTime)
+                .HasColumnType("datetime2")
+                .IsRequired();
+
+            // Indexes for common queries
+            entity.HasIndex(e => e.BlockDate);
+            entity.HasIndex(e => e.ReleaseDate);
+            entity.HasIndex(e => e.ContractNumber);
+            entity.HasIndex(e => e.SalesOrganization);
         });
     }
 }

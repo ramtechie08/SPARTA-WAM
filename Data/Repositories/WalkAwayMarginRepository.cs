@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SPARTA_WAM.Data;
 using SPARTA_WAM.Data.Models;
 using SPARTA_WAM.Data.Resilience;
 
