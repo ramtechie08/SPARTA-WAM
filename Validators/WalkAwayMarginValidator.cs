@@ -25,3 +25,4 @@ public class WalkAwayMarginValidator : AbstractValidator<WalkAwayMarginRequest>
             .WithMessage("Type must be either 'D' (Direct) or 'I' (Indirect)");
     }
 }
+

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
-using SPARTA_WAM.Data.Repositories;
 using SPARTA_WAM.Data.Models;
+using SPARTA_WAM.Data.Repositories;
 using SPARTA_WAM.Models;
 
 namespace SPARTA_WAM.Data.Services;
