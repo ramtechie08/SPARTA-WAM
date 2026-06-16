@@ -45,6 +45,7 @@ public class LaoFreezeExcelProcessor : ILaoFreezeExcelProcessor
                 var contractNoColumnIndex = FindColumnIndex(headerRow, "ContractNo");
                 var blockDateColumnIndex = FindColumnIndex(headerRow, "BlockDate");
                 var releaseDateColumnIndex = FindColumnIndex(headerRow, "ReleaseDate");
+                var regionColumnIndex = FindColumnIndex(headerRow, "Region"); // NEW
 
                 var dataRows = worksheet.RowsUsed().Skip(1);
                 var processedContracts = new HashSet<string>();
@@ -54,15 +55,20 @@ public class LaoFreezeExcelProcessor : ILaoFreezeExcelProcessor
                     var contractNo = row.Cell(contractNoColumnIndex).GetString().Trim();
                     var blockDateText = row.Cell(blockDateColumnIndex).GetString().Trim();
                     var releaseDateText = row.Cell(releaseDateColumnIndex).GetString().Trim();
+                    var region = row.Cell(regionColumnIndex).GetString().Trim(); // NEW
 
                     // Skip empty rows
                     if (string.IsNullOrWhiteSpace(contractNo))
                         continue;
 
+                    // Validate region
+                    if (string.IsNullOrWhiteSpace(region))
+                        throw new InvalidOperationException($"Region is required for contract: {contractNo}");
+
                     // Skip duplicates
-                    if (processedContracts.Contains(contractNo))
+                    if (processedContracts.Contains($"{contractNo}_{region}"))
                     {
-                        _logger.LogWarning($"Duplicate contract number found and skipped: {contractNo}");
+                        _logger.LogWarning($"Duplicate contract-region combination found and skipped: {contractNo} for {region}");
                         continue;
                     }
 
@@ -77,10 +83,11 @@ public class LaoFreezeExcelProcessor : ILaoFreezeExcelProcessor
                     {
                         ContractNumber = contractNo,
                         BlockDate = blockDate,
-                        ReleaseDate = releaseDate
+                        ReleaseDate = releaseDate,
+                        Region = region.ToUpper()
                     });
 
-                    processedContracts.Add(contractNo);
+                    processedContracts.Add($"{contractNo}_{region}");
                 }
 
                 _logger.LogInformation($"Processed {rows.Count} LAO Freeze records from Excel file");
@@ -113,6 +120,7 @@ public class LaoFreezeExcelProcessor : ILaoFreezeExcelProcessor
                 var blockDateColumnIndex = FindColumnIndex(headerRow, "BlockDate");
                 var releaseDateColumnIndex = FindColumnIndex(headerRow, "ReleaseDate");
                 var shortCodeColumnIndex = FindColumnIndex(headerRow, "Short_Code");
+                var regionColumnIndex = FindColumnIndex(headerRow, "Region"); // NEW
 
                 var dataRows = worksheet.RowsUsed().Skip(1);
 
@@ -122,10 +130,15 @@ public class LaoFreezeExcelProcessor : ILaoFreezeExcelProcessor
                     var blockDateText = row.Cell(blockDateColumnIndex).GetString().Trim();
                     var releaseDateText = row.Cell(releaseDateColumnIndex).GetString().Trim();
                     var shortCode = row.Cell(shortCodeColumnIndex).GetString().Trim();
+                    var region = row.Cell(regionColumnIndex).GetString().Trim(); // NEW
 
                     // Skip empty rows
                     if (string.IsNullOrWhiteSpace(salesOrg))
                         continue;
+
+                    // Validate region
+                    if (string.IsNullOrWhiteSpace(region))
+                        throw new InvalidOperationException($"Region is required for sales org: {salesOrg}");
 
                     // Parse dates
                     if (!DateTime.TryParse(blockDateText, out var blockDate))
@@ -139,7 +152,8 @@ public class LaoFreezeExcelProcessor : ILaoFreezeExcelProcessor
                         SalesOrganization = salesOrg,
                         BlockDate = blockDate,
                         ReleaseDate = releaseDate,
-                        ShortCode = shortCode
+                        ShortCode = shortCode,
+                        Region = region.ToUpper()
                     });
                 }
 

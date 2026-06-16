@@ -53,7 +53,8 @@ values
                 ContractNumber = row.ContractNumber,
                 BlockDate = row.BlockDate,
                 ReleaseDate = row.ReleaseDate,
-                FreezeType = "PA"
+                FreezeType = "PA",
+                Region = row.Region
             });
         }
 
@@ -91,7 +92,8 @@ values
                 ShortCode = row.ShortCode,
                 BlockDate = row.BlockDate,
                 ReleaseDate = row.ReleaseDate,
-                FreezeType = "Product"
+                FreezeType = "Product",
+                Region = row.Region
             });
         }
 

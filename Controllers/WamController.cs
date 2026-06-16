@@ -22,6 +22,7 @@ public class WamController : ControllerBase
         _logger = logger;
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     [HttpPost("generate-script")]
     public async Task<IActionResult> GenerateWamUpdateScript(IFormFile file)
     {
@@ -66,6 +67,7 @@ public class WamController : ControllerBase
         }
     }
 
+    [ApiExplorerSettings(IgnoreApi = true)]
     [HttpPost("execute-scripts")]
     public async Task<IActionResult> ExecuteWamScripts([FromBody] List<string> sqlScripts)
     {

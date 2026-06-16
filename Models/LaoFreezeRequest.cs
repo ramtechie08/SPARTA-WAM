@@ -11,13 +11,14 @@ public class LaoFreezeRequest
 }
 
 /// <summary>
-/// Represents a LAO Freeze/Block PA row from Excel.
+/// LAO Freeze/Block PA request with region information.
 /// </summary>
 public class LaoFreezeRow
 {
     public required string ContractNumber { get; set; }
     public DateTime BlockDate { get; set; }
     public DateTime ReleaseDate { get; set; }
+    public required string Region { get; set; } // NEW: Region identifier
 }
 
 /// <summary>
@@ -32,7 +33,7 @@ public class LaoProductFreezeRequest
 }
 
 /// <summary>
-/// Represents a LAO Product Freeze row from Excel.
+/// LAO Product Freeze request with region information.
 /// </summary>
 public class LaoProductFreezeRow
 {
@@ -40,6 +41,7 @@ public class LaoProductFreezeRow
     public DateTime BlockDate { get; set; }
     public DateTime ReleaseDate { get; set; }
     public required string ShortCode { get; set; }
+    public required string Region { get; set; } // NEW: Region identifier
 }
 
 /// <summary>
@@ -54,6 +56,7 @@ public class LaoFreezeScriptResult
     public DateTime BlockDate { get; set; }
     public DateTime ReleaseDate { get; set; }
     public required string FreezeType { get; set; } // "PA" or "Product"
+    public required string Region { get; set; } // NEW: Region identifier (APAC, EMEA, LAO, NA)
 }
 
 /// <summary>
@@ -67,5 +70,42 @@ public class LaoFreezeRecordDto
     public DateTime BlockDate { get; set; }
     public DateTime ReleaseDate { get; set; }
     public DateTime CreatedDateTime { get; set; }
+    public string FreezeType { get; set; } = string.Empty;
+}
+
+/// <summary>
+/// Request to execute LAO Freeze scripts for a specific region.
+/// </summary>
+public class ExecuteLaoFreezeRequest
+{
+    public required string RegionCode { get; set; }
+    public required List<string> SqlScripts { get; set; }
+}
+
+/// <summary>
+/// Response for upload and execute operations.
+/// </summary>
+public class LaoFreezeUploadExecuteResponse
+{
+    public bool Success { get; set; }
+    public string FreezeType { get; set; } = string.Empty; // "PA" or "Product"
+    public string Message { get; set; } = string.Empty;
+    public int ScriptCount { get; set; }
+    public Dictionary<string, int> RowsAffectedByRegion { get; set; } = new();
+    public List<LaoFreezeExecutionDetail> Details { get; set; } = new();
+    public List<string> Errors { get; set; } = new();
+}
+
+/// <summary>
+/// Details of each freeze record executed.
+/// </summary>
+public class LaoFreezeExecutionDetail
+{
+    public string? ContractNumber { get; set; }
+    public string? SalesOrganization { get; set; }
+    public string? ShortCode { get; set; }
+    public DateTime BlockDate { get; set; }
+    public DateTime ReleaseDate { get; set; }
+    public string Region { get; set; } = string.Empty;
     public string FreezeType { get; set; } = string.Empty;
 }
