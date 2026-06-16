@@ -88,7 +88,19 @@ POST /api/laofreeze/freeze-product/generate-script Content-Type: multipart/form-
 #### Execute (Upload and Execute)
 
 POST /api/laofreeze/freeze-product/upload-and-execute Content-Type: multipart/form-data
-Response (200): { "success": true, "freezeType": "Product", "message": "LAO Product Freeze completed successfully", "scriptCount": 1, "rowsAffected": 1, "details": [...] }
+Body: [file upload]
+
+# Response
+json
+{
+  "success": true,
+  "freezeType": "Product",
+  "message": "LAO Product Freeze completed successfully",
+  "scriptCount": 1,
+  "rowsAffected": 1,
+  "details": [...]
+
+}
 
 ### Query Endpoints
 
@@ -187,6 +199,17 @@ GET /api/laofreeze/active
 | 27198           | 1/1/2024    | 12/31/2024   |
 | 54321           | 2/1/2024    | 6/30/2024    |
   
+LAO Freeze/Block PA Template
+ContractNo	BlockDate	ReleaseDate	Region
+27198	1/1/2024	12/31/2024	APAC
+54321	2/1/2024	6/30/2024	EMEA
+11111	3/1/2024	9/30/2024	NA
+
+LAO Product Freeze Template
+SalesOrg	BlockDate	ReleaseDate	Short_Code	Region
+1000	1/1/2024	12/31/2024	ABC123	APAC
+2000	2/1/2024	6/30/2024	XYZ789	EMEA
+3000	3/1/2024	9/30/2024	DEF456	NA
 
 # Response
 json
@@ -262,28 +285,196 @@ Execute in Database
 Return Results with Row Count
 
 
+Endpoint: POST /api/laofreeze/freeze-pa/upload-and-execute
 
 # Response
 
 {
   "success": true,
   "freezeType": "PA",
-  "message": "LAO Freeze/Block PA process completed successfully",
-  "scriptCount": 2,
-  "rowsAffected": 2,
+  "message": "LAO Freeze/Block PA completed successfully",
+  "scriptCount": 6,
+  "rowsAffectedByRegion": {
+    "APAC": 2,
+    "EMEA": 2,
+    "LAO": 1,
+    "NA": 1
+  },
   "details": [
     {
       "contractNumber": "27198",
-      "blockDate": "2024-01-01T00:00:00Z",
-      "releaseDate": "2024-12-31T00:00:00Z"
-    },
-    {
-      "contractNumber": "54321",
-      "blockDate": "2024-02-01T00:00:00Z",
-      "releaseDate": "2024-06-30T00:00:00Z"
+      "blockDate": "2024-01-01T00:00:00",
+      "releaseDate": "2024-12-31T00:00:00",
+      "region": "APAC",
+      "freezeType": "PA"
     }
   ]
 }
+--Endpoint: GET /api/laofreeze/regions
+{
+  "success": true,
+  "regionCount": 4,
+  "regions": [
+    {
+      "regionCode": "APAC",
+      "regionName": "Asia Pacific",
+      "isActive": true
+    },
+    {
+      "regionCode": "EMEA",
+      "regionName": "Europe, Middle East, Africa",
+      "isActive": true
+    }
+  ]
+}
+
+
+-- Note: The above responses are examples and may vary based on actual implementation and data.
+-- End of LAO Freeze/Block PA & Product Freeze Integration Guide
+-- Note: This documentation is intended for developers and technical teams responsible for implementing and maintaining the LAO Freeze/Block PA and Product Freeze processes within the SPARTA WAM solution. It provides detailed information on the expected input formats, processing steps, API endpoints, database schema, validation rules, error handling, and testing procedures to ensure a successful integration.
+-- For any questions or issues during implementation, please refer to the SPARTA WAM technical support team or consult the internal documentation for further guidance.
+-- LAO Freeze/Block PA & Product Freeze Integration Guide v1.0 | June 2026 | ✅ Production Ready
+-- End of Document
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

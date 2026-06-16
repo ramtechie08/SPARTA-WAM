@@ -45,6 +45,8 @@ builder.Services.AddScoped<IValidator<LaoProductFreezeRequest>, LaoProductFreeze
 builder.Services.AddScoped<ILaoFreezeInputValidationService, LaoFreezeInputValidationService>();
 builder.Services.AddScoped<ILaoFreezeSqlScriptGenerator, LaoFreezeSqlScriptGenerator>();
 builder.Services.AddScoped<ILaoFreezeProcessingService, LaoFreezeProcessingService>();
+builder.Services.AddScoped<IRegionProvider, RegionProvider>();
+builder.Services.AddScoped<IRegionAwareLaoFreezeDatabaseService, RegionAwareLaoFreezeDatabaseService>();
 
 // Add Logging
 builder.Services.AddLogging(config =>
